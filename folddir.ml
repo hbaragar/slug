@@ -75,8 +75,8 @@ struct
   type glob_type = Accept | Deny
   (* Simple: no wildcards, no slash
    * Simple_local: leading slash, otherwise no slashes, no wildcards
-   * Endswith: *.whatever, no slashes
-   * Endswith_local: *.whatever, leading slash only
+   * Endswith: *whatever, no slashes
+   * Endswith_local: *whatever, leading slash only
    * Startswith_local: whatever*, leading slash only
    * Noslash: wildcards, no slashes
    * Nowildcard: non-prefix slashes, no wildcards
@@ -96,8 +96,8 @@ struct
   let string_of_patt = function
       Simple s | Noslash s | Complex s | Nowildcard (s, _) -> s
       | Simple_local s -> "/" ^ s
-      | Endswith s -> "*." ^ s
-      | Endswith_local s -> "/*." ^ s
+      | Endswith s -> "*" ^ s
+      | Endswith_local s -> "/*" ^ s
       | Startswith_local s -> "/" ^ s ^ "*"
 
   let has_wildcard s =
