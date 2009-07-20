@@ -158,10 +158,6 @@ When you want to sync the laptop, just:
 Known Bugs
 ==========
 
-* .gitignore patterns ending in "/" should match directories, but not files, per "man gitignore".  
-  We fail to match them at all!  Workaround: be sure that none of your directory patterns will
-  accidentally match a file, and then just remove the trailing slashes.
-  
 * ometastore gets confused trying to do chown and utime on symlinks.  It spits a harmless error
   out, but this should be cleaned up.
 
