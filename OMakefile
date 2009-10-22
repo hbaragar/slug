@@ -18,6 +18,7 @@ USE_OCAMLFIND = TRUE
 OCAMLPACKS[] =
     fileutils
     unix
+    str
 
 # === No change should be needed after this line. ===
 
@@ -27,7 +28,6 @@ OCAMLOPTFLAGS += -inline 10 -S
 StaticCLibrary(ometastore_stub, ometastore_stub)
 
 OCAML_CLIBS += ometastore_stub
-OCAML_OTHER_LIBS += str
 
 OCamlProgram(ometastore, folddir util ometastore)
 OCamlProgram(find-git-repos, folddir util find-git-repos)
