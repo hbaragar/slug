@@ -1,3 +1,15 @@
+# If your build aborts with an error saying that find-git-files
+# and/or find-git-repos are invalid modules names, uncomment the
+# following line. Some versions of omake(?) use -warn-error A to
+# convert all warnings into errors. If we turn off that
+# warning-to-error promotion for the "x" warnings, the build can
+# continue.
+#OCAMLFLAGS += -warn-error x
+
+# If ocaml-fileutils is not installed in the same place as the OCaml
+# compiler, then ocamlfind will need to be told where it can find
+# fileutils.
+#setenv(OCAMLPATH, /path/to/ocaml-fileutils/install/lib)
 
 # Include path for the caml headers <caml/mlvalues.h> and friends.  
 # You might need something this if you have installed OCaml manually or via
