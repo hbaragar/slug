@@ -5,7 +5,7 @@ open Printf
 open Unix
 open Folddir
 open Util
-open FileUtil.StrUtil
+open FileUtil
 
 let debug = ref false
 let verbose = ref false
