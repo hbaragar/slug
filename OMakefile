@@ -34,7 +34,7 @@ OCAMLPACKS[] =
 
 # === No change should be needed after this line. ===
 
-OCAMLFLAGS += -dtypes
+OCAMLFLAGS += -dtypes -warn-error Aelzx -w Aelzx
 OCAMLOPTFLAGS += -inline 10 -S
 
 StaticCLibrary(ometastore_stub, ometastore_stub)
