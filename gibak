@@ -20,8 +20,8 @@
 version="0.3.0"
 
 if ! which git &>/dev/null; then
-    echo "Please Git" >&2
-    echo "See http://git.or.cz for more information about Git" >&2
+    echo "Could not locate Git in PATH; adjust PATH and/or install Git" >&2
+    echo "See http://git-scm.com/ for more information about Git" >&2
     exit 1
 fi
 
@@ -262,7 +262,7 @@ function rm_older_than() {
 
     if ! which git filter-branch &>/dev/null; then
 	echo "Please install a recent version of Git" >&2
-	echo "See http://git.or.cz for more information about Git" >&2
+	echo "See http://git-scm.com/ for more information about Git" >&2
 	exit 1
     fi
 
