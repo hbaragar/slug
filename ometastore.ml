@@ -232,7 +232,8 @@ let fix_usergroup e =
   try
     out "%s: set owner/group to %S %S\n" e.path e.owner e.group;
     chown e.path (getpwnam e.owner).pw_uid (getgrnam e.group).gr_gid;
-  with Unix_error _ -> ( out "chown failed: %s\n" e.path )
+  with | Unix_error _ -> ( out "chown failed: %s\n" e.path )
+       | Not_found -> ( out "File is missing: %s\n" e.path )
 
 let fix_xattrs src dst =
   out "%s: fixing xattrs (" src.path;
