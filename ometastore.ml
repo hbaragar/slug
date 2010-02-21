@@ -163,7 +163,12 @@ let read_entries fname =
         kind = kind; xattrs = List.rev !attrs }
   in do_finally (open_in_bin fname) close_in begin fun is ->
     if magic <> input_line is then failwith "Invalid file: bad magic";
-    let _ = input_line is (* version *) in
+    let version' = input_line is (* version *) in
+    (* FIXME: proper version check *)
+      if version <> version' then begin
+        eprintf "Wrong version (wanted %s, got %s)\n%!" version version';
+        exit (-1)
+      end;
     let entries = ref [] in
     let prev = ref "" in
       try
