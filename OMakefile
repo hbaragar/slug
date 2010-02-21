@@ -37,6 +37,9 @@ OCAMLPACKS[] =
 OCAMLFLAGS += -dtypes -warn-error Aelzx -w Aelzx
 OCAMLOPTFLAGS += -inline 10 -S
 
+%.o: %.c
+    $(OCAMLC) $(mapprefix -ccopt, $(CFLAGS)) -c $^
+
 StaticCLibrary(ometastore_stub, ometastore_stub)
 
 OCAML_CLIBS += ometastore_stub
