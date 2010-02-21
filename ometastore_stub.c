@@ -142,22 +142,16 @@ CAMLprim value perform_llistxattr(value file)
 
 CAMLprim value perform_lgetxattr(value file, value name)
 {
- CAMLparam2(file, name);
-
  caml_failwith("lgetxattr");
 }
 
 CAMLprim value perform_lsetxattr(value file, value name, value val)
 {
- CAMLparam3(file, name, val);
-
  caml_failwith("lsetxattr");
 }
 
 CAMLprim value perform_lremovexattr(value file, value name)
 {
- CAMLparam2(file, name);
-
  caml_failwith("lremovexattr");
 }
 
