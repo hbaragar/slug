@@ -257,11 +257,31 @@ let fix_xattrs src dst =
     SMap.iter (fun name _ -> if not (SMap.mem name dst) then del_attr name) src;
     out ")\n"
 
+let rec create_dir path mode =
+  try
+    Unix.mkdir path mode
+  with
+      Unix_error (EEXIST, _, _) ->
+        if not (Sys.is_directory path) then
+          failwith (sprintf "create_dir: %S exists and is not a directory" path)
+        else
+          Unix.chmod path mode
+    | Unix_error (ENOENT, _, _) ->
+        create_dir (Filename.dirname path) 0o755;
+        Unix.mkdir path mode
+    | Unix_error (EACCES, _, _) ->
+        let parent_dir = Filename.dirname path in
+        let parent_mode = (stat parent_dir).st_perm in
+          do_finally
+            ()
+            (fun () -> chmod parent_dir parent_mode)
+            (fun () -> chmod parent_dir 0x755;
+                       mkdir path mode)
+
 let apply_change = function
   | Added e when e.kind = S_DIR ->
       out "%s: mkdir (mode %04o)\n" e.path e.mode;
-      mkdir ~parent:true e.path;
-      chmod e.path e.mode;
+      create_dir e.path e.mode;
       fix_usergroup e
   | Deleted _ | Added _ -> ()
   | Diff (e1, e2) ->
