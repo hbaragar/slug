@@ -271,12 +271,12 @@ let rec create_dir path mode =
         Unix.mkdir path mode
     | Unix_error (EACCES, _, _) ->
         let parent_dir = Filename.dirname path in
-        let parent_mode = (stat parent_dir).st_perm in
+        let parent_mode = (Unix.stat parent_dir).st_perm in
           do_finally
             ()
             (fun () -> chmod parent_dir parent_mode)
             (fun () -> chmod parent_dir 0x755;
-                       mkdir path mode)
+                       Unix.mkdir path mode)
 
 let apply_change = function
   | Added e when e.kind = S_DIR ->
