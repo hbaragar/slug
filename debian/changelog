@@ -1,3 +1,9 @@
+gibak (0.3.0-0ubuntu1) lucid; urgency=low
+
+  * Pulled from git://github.com/mfp/gibak.git 
+
+ -- Mathias Kaufmann <steiger@mmforces.de>  Thu, 08 Apr 2010 13:23:40 +0200
+
 gibak (0.3.0ubuntu1) lucid; urgency=low
 
   * Fixed dependency to dh-ocaml
