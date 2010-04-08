@@ -4,11 +4,13 @@
 #include <caml/mlvalues.h>
 #include <caml/memory.h>
 #include <caml/fail.h>
+#include <caml/alloc.h>
 #include <fnmatch.h>
 #include <stdio.h>
 #include <sys/errno.h>
 #include <sys/types.h>
 #include <utime.h>
+#include <string.h>
 
 #if defined(HAVE_LINUX_XATTR) || defined(HAVE_OSX_XATTR)
 #include <sys/xattr.h>
@@ -47,7 +49,7 @@ CAMLprim value perform_utime(value file, value time)
 	tbuf.actime = Nativeint_val(time);
 	tbuf.modtime = Nativeint_val(time);
 	if(utime(String_val(file), &tbuf)) {
-	    printf("utime on %s to %d failed, error %i: %s\n", file, Nativeint_val(time), errno, strerror(errno));
+	    printf("utime on %s to %"ARCH_INTNAT_PRINTF_FORMAT"d failed, error %i: %s\n", String_val(file), Nativeint_val(time), errno, strerror(errno));
         caml_failwith("utime");
     }
 
@@ -67,7 +69,7 @@ CAMLprim value perform_llistxattr(value file)
  if (siz == 0 || errno == EPERM || errno == EACCES)
      CAMLreturn(Val_int(0));
  if(siz < 0) {   
-     printf("llistxattr on %s failed, error %i: %s\n", file, errno, strerror(errno));
+     printf("llistxattr on %s failed, error %i: %s\n", String_val(file), errno, strerror(errno));
      caml_failwith("llistxattr");
 }
 
@@ -140,22 +142,16 @@ CAMLprim value perform_llistxattr(value file)
 
 CAMLprim value perform_lgetxattr(value file, value name)
 {
- CAMLparam2(file, name);
-
  caml_failwith("lgetxattr");
 }
 
 CAMLprim value perform_lsetxattr(value file, value name, value val)
 {
- CAMLparam3(file, name, val);
-
  caml_failwith("lsetxattr");
 }
 
 CAMLprim value perform_lremovexattr(value file, value name)
 {
- CAMLparam2(file, name);
-
  caml_failwith("lremovexattr");
 }
 

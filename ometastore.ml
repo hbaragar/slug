@@ -163,7 +163,12 @@ let read_entries fname =
         kind = kind; xattrs = List.rev !attrs }
   in do_finally (open_in_bin fname) close_in begin fun is ->
     if magic <> input_line is then failwith "Invalid file: bad magic";
-    let _ = input_line is (* version *) in
+    let version' = input_line is (* version *) in
+    (* FIXME: proper version check *)
+      if version <> version' then begin
+        eprintf "Wrong version (wanted %s, got %s)\n%!" version version';
+        exit (-1)
+      end;
     let entries = ref [] in
     let prev = ref "" in
       try
@@ -232,7 +237,8 @@ let fix_usergroup e =
   try
     out "%s: set owner/group to %S %S\n" e.path e.owner e.group;
     chown e.path (getpwnam e.owner).pw_uid (getgrnam e.group).gr_gid;
-  with Unix_error _ -> ( out "chown failed: %s\n" e.path )
+  with | Unix_error _ -> ( out "chown failed: %s\n" e.path )
+       | Not_found -> ( out "File is missing: %s\n" e.path )
 
 let fix_xattrs src dst =
   out "%s: fixing xattrs (" src.path;
@@ -256,11 +262,31 @@ let fix_xattrs src dst =
     SMap.iter (fun name _ -> if not (SMap.mem name dst) then del_attr name) src;
     out ")\n"
 
+let rec create_dir path mode =
+  try
+    Unix.mkdir path mode
+  with
+      Unix_error (EEXIST, _, _) ->
+        if not (Sys.is_directory path) then
+          failwith (sprintf "create_dir: %S exists and is not a directory" path)
+        else
+          Unix.chmod path mode
+    | Unix_error (ENOENT, _, _) ->
+        create_dir (Filename.dirname path) 0o755;
+        Unix.mkdir path mode
+    | Unix_error (EACCES, _, _) ->
+        let parent_dir = Filename.dirname path in
+        let parent_mode = (Unix.stat parent_dir).st_perm in
+          do_finally
+            ()
+            (fun () -> chmod parent_dir parent_mode)
+            (fun () -> chmod parent_dir 0x755;
+                       Unix.mkdir path mode)
+
 let apply_change = function
   | Added e when e.kind = S_DIR ->
       out "%s: mkdir (mode %04o)\n" e.path e.mode;
-      mkdir ~parent:true e.path;
-      chmod e.path e.mode;
+      create_dir e.path e.mode;
       fix_usergroup e
   | Deleted _ | Added _ -> ()
   | Diff (e1, e2) ->
