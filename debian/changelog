@@ -1,3 +1,11 @@
+gibak (0.3.0ubuntu1) lucid; urgency=low
+
+  * Fixed dependency to dh-ocaml
+  * Fixed cdbs-includes
+  * Fixed OMakefile for FileUtil-includes 
+
+ -- Mathias Kaufmann <steiger@mmforces.de>  Thu, 08 Apr 2010 13:08:58 +0200
+
 gibak (0.3.0) UNRELEASED; urgency=low
 
   * Initial release.

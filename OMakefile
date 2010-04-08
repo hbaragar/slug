@@ -29,6 +29,9 @@ StaticCLibrary(ometastore_stub, ometastore_stub)
 OCAML_CLIBS += ometastore_stub
 OCAML_OTHER_LIBS += str
 
+INCLUDES += /usr/lib/ocaml/fileutils
+OCAMLFLAGS += -warn-error x
+
 OCamlProgram(ometastore, folddir util ometastore)
 OCamlProgram(find-git-repos, folddir util find-git-repos)
 OCamlProgram(find-git-files, folddir util find-git-files)
