@@ -180,7 +180,7 @@ EOF
     echo
     echo "You might be interested in tweaking the ~/.gitignore file"
     echo
-    echo "Please run '$SCRIPT_NAME commit' to save a first state in your history"
+    echo "Please run '$SCRIPT_NAME it' to save a first state in your history"
 }
 
 function fix-hooks() {
@@ -226,7 +226,7 @@ function rm_all() {
 }
 
 
-function commit() {
+function slug-it() {
     __abort_on_not_initialized
     local what=("$@")
     local modifier=
@@ -277,7 +277,7 @@ function rm_older_than() {
 	'test $(git rev-parse "HEAD@{$time_spec}") = "$GIT_COMMIT" || cat ' \
 	HEAD
     if test "$?" != "0"; then
-	die "Please make sure you did '$SCRIPT_NAME commit' before removing old files."
+	die "Please make sure you did '$SCRIPT_NAME it' before removing old files."
     fi
 
     # See git mailing list
@@ -378,10 +378,10 @@ function eat() {
     __abort_on_not_initialized
 
     git add -v -- "$@" || die "Could not add '$@' to the history store"
-    commit "$@"
+    slug-it "$@"
     git rm -r -f -- "$@" || die "Problem removing '$@'"
     rm -rf -- "$@" # some empty dirs may remain. clean'em up
-    commit "$@"
+    slug-it "$@"
 }
 
 case "$1" in
@@ -389,7 +389,7 @@ case "$1" in
 	if ! __has_initialized ; then
 	    init
 	fi
-	commit
+	slug-it
 	;;
     fix-hooks)
 	fix-hooks
@@ -421,8 +421,8 @@ case "$1" in
 	fi
 	show "$@"
 	;;
-    commit)
-	commit
+    it)
+	slug-it
 	;;
     eat)
 	if test "$ORIG_DIR" != "$HOME"; then
@@ -453,12 +453,12 @@ case "$1" in
     ls-changed-files)
         echo "These files have been modified:" >&2
         git ls-files --exclude-standard --modified
-	echo "Use '$SCRIPT_NAME commit' to store them" >&2
+	echo "Use '$SCRIPT_NAME it' to store them" >&2
         ;;
     ls-new-files)
 	echo "These files are not yet stored:" >&2
 	git ls-files --exclude-standard --others
-	echo "Use '$SCRIPT_NAME commit' to store them" >&2
+	echo "Use '$SCRIPT_NAME it' to store them" >&2
 	;;
     ls-ignored-files)
 	echo "These files are ignored:" >&2
@@ -502,7 +502,7 @@ case "$1" in
 	echo "<action> can be:"
 	echo "    help"
 	echo "    init"
-	echo "    commit"
+	echo "    it		# to make a snaphot"
 	echo "    fix-hooks"
 	echo "    eat <file_or_dir>"
 	echo "    show <file> as of <time_spec>"
