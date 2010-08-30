@@ -114,34 +114,8 @@ function init() {
     XDG_VIDEOS_DIR=$( echo ${XDG_VIDEOS_DIR#${HOME}} | sed 's:^/*::' )
     XDG_MUSIC_DIR=$( echo ${XDG_MUSIC_DIR#${HOME}} | sed 's:^/*::' )
 
-    mkdir .git-hooks || die "Couldn't create .git-hooks directory."
+    fix-hooks
 
-    # Set up pre-commit hook.  We link to .git-hooks, rather than writing 
-    # the hook directly to .git/hooks, so that the hook files will be 
-    # versioned by git, and cloned easily to other machines.
-    cat << EOF > .git-hooks/pre-commit
-        
-#!/bin/sh
-
-if [[ "\$SKIP_OMETASTORE" == "" ]]; then
-    ometastore -s -x -i -m --sort
-    git add -f .ometastore
-fi
-EOF
-
-    ln -s .git-hooks/pre-commit .git/hooks
-
-    # Set up post-checkout hook
-    cat << EOF > .git-hooks/post-checkout
-#!/bin/sh
-
-if [[ "\$SKIP_OMETASTORE" == "" ]]; then
-    ometastore -a -x -i -m
-fi
-EOF
-
-    ln -s .git-hooks/post-checkout .git/hooks
-    
     # Create sample .gitignore if one isn't present
     test -e .gitignore || cat << EOF > .gitignore
 #
@@ -202,14 +176,39 @@ EOF
 EOF
 
     git add -f .gitignore
-    git add -f .git-hooks
-    chmod u+x .git-hooks/pre-commit
-    chmod u+x .git-hooks/post-checkout
     git commit -q -a -m "Initialized by $SCRIPT_NAME"
     echo
     echo "You might be interested in tweaking the ~/.gitignore file"
     echo
     echo "Please run '$SCRIPT_NAME commit' to save a first state in your history"
+}
+
+function fix-hooks() {
+
+    rm -f .git/hooks/pre-commit
+    rm -f .git/hooks/post-checkout
+
+    # Set up pre-commit hook. 
+    cat << EOF > .git/hooks/pre-commit
+#!/bin/bash
+
+if [[ "\$SKIP_OMETASTORE" == "" ]]; then
+    ometastore -s -x -i -m --sort
+    git add -f .ometastore
+fi
+EOF
+
+    # Set up post-checkout hook
+    cat << EOF > .git/hooks/post-checkout
+#!/bin/bash
+
+if [[ "\$SKIP_OMETASTORE" == "" ]]; then
+    ometastore -a -x -i -m
+fi
+EOF
+    
+    chmod u+x .git/hooks/pre-commit
+    chmod u+x .git/hooks/post-checkout
 }
 
 function rm_all() {
@@ -392,6 +391,9 @@ case "$1" in
 	fi
 	commit
 	;;
+    fix-hooks)
+	fix-hooks
+	;;
     init)
 	init
 	;;
@@ -501,6 +503,7 @@ case "$1" in
 	echo "    help"
 	echo "    init"
 	echo "    commit"
+	echo "    fix-hooks"
 	echo "    eat <file_or_dir>"
 	echo "    show <file> as of <time_spec>"
 	echo "    ls-changed-files"
