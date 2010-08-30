@@ -1,3 +1,7 @@
+2010-08-30 11:00	Henry Baragar <henry.baragar@instantiated.ca>
+	* Renamed to slug
+	* I intend to rename some of the commands
+
 2008-11-30 09:00	Jay Levitt		<jay@jay.fm>
         * Put our hooks in .git-hooks so they can be cloned
 

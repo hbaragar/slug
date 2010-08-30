@@ -1,22 +1,34 @@
-Copyright (C) 2008 Mauricio Fernandez <mfp@acm.org>
+Copyright (C) 2010 Henry Baragar <henry.baragar@instantiated.ca>
+          (C) 2008 Mauricio Fernandez <mfp@acm.org>
           (C) 2007 Jean-Francois Richard <jean-francois@richard.name>
 
-gibak -- backup tool based on Git
+slug -- snapshots using git
 =================================
-Since gibak builds upon the infrastructure offered by Git, it shares its main
+slug creates a Git repository of your $HOME directory.  That is it takes a 
+snapshot/backup of it using Git.
+
+Since slug builds upon the infrastructure offered by Git, it shares its main
 strengths:
 * speed: recovering your data is faster that cp -a...
 * full revision history
 * space-efficient data store, with file compression and textual/binary deltas
 * efficient transport protocol to replicate the backup (faster than rsync)
 
-gibak uses Git's hook system to save and restore the information Git doesn't
+slug uses Git's hook system to save and restore the information Git doesn't
 track itself such as permissions, empty directories and optionally mtime
 fields.
 
+History
+=======
+I seem to have a lot of trouble typing "gibak" and "gibak commit" (which just
+doesn't make sense to me).  So I renamed it slug (following the meme use for
+name "git") and will change the "commit" command to "it".  I probably will add 
+a "slug outta-here" to do a "slug it" followed by a "git push".
+
+
 Dependencies
 ============
-gibak needs the following software at run-time:
+slug needs the following software at run-time:
 * git (tested with git version 1.5.4.2, might work with earlier versions)
 * rsync >= 2.6.4 (released on 30 March 2005), used to manage nested git
   repositories (submodules)
@@ -49,26 +61,26 @@ in most cases, but you might need to change a couple variables:
 
   find-git-files
   find-git-repos
-  gibak
+  slug
   ometastore
 
 Usage
 =====
-Run gibak without any options to get a help message.
+Run slug without any options to get a help message.
 
 The normal workflow is:
 
- $ gibak init        # run once to initialize the backup system
+ $ slug init        # run once to initialize the backup system
  $ vim .gitignore    # edit to make sure you don't import unwanted files
                      # edit .gitignore files in other subdirectories
                      # you can get a list of the files which will be saved
-                     # with  find-git-files  or  gibak ls-new-files
- $ gibak commit      # the first commit will be fairly slow, but the following
+                     # with  find-git-files  or  slug ls-new-files
+ $ slug commit      # the first commit will be fairly slow, but the following
                      # ones will be very fast
 
 .... later ....
 
- $ gibak commit
+ $ slug commit
 
 The backup will be placed in $HOME/.git. "Nested Git repositories" will be
 rsync'ed to $HOME/.git/git-repositories and they will be registered as
@@ -76,8 +88,8 @@ submodules in the main Git repository (run  git help submodule  for more
 information on submodules). You might want to use a cronjob to save snapshots
 of the repositories in $HOME/.git/git-repositories 
 
-After you gibak init, $HOME becomes a git repository, so you can use normal git
-commands. If you use "gibak commit", however, new files will automatically be
+After you slug init, $HOME becomes a git repository, so you can use normal git
+commands. If you use "slug commit", however, new files will automatically be
 added to the repository if they are not ignored (as indicated in your
 .gitignore files), so you'll normally prefer it to "git commit".
 
@@ -98,10 +110,10 @@ checkout.  Be sure that your UID and GUID are the same on both machines!
 
 So, to clone from your desktop to your laptop, do this on the laptop:
 
-1. Copy over gibak and ometastore to a directory in your path
+1. Copy over slug and ometastore to a directory in your path
 /Users/bob$ sudo -s
 /Users/bob# cd /usr/local/bin
-/usr/local/bin# scp desktop:/usr/local/bin/gibak .
+/usr/local/bin# scp desktop:/usr/local/bin/slug .
 /usr/local/bin# scp desktop:/usr/local/bin/ometastore .
 
 1. Do the initial clone
@@ -129,7 +141,7 @@ should update these docs with that magic solution.
 
 3. Recommit
 /Users/bob# exit
-/Users/bob$ gibak commit
+/Users/bob$ slug commit
 
 4. Push back to the desktop
 
@@ -164,7 +176,7 @@ Known Bugs
 
 License
 =======
-The gibak script is free software: you can redistribute it and/or modify it
+The slug script is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free
 Software Foundation, either version 2 of the License, or (at your option) any
 later version.
