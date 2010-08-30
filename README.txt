@@ -20,10 +20,11 @@ fields.
 
 History
 =======
-I seem to have a lot of trouble typing "gibak" and "gibak commit" (which just
-doesn't make sense to me).  So I renamed it slug (following the meme use for
-name "git") and will change the "commit" command to "it".  I probably will add 
-a "slug outta-here" to do a "slug it" followed by a "git push".
+slub mostly is "gibak" with some improvements.  I seem to have a lot of trouble
+typing "gibak" and "gibak commit" (which just doesn't make sense to me).  So
+I renamed it slug (following the meme use for name "git") and will changed the
+"commit" command to "it".  I probably will add a "slug outta-here" to do a
+"slug it" followed by a "git push".
 
 
 Dependencies
@@ -70,17 +71,17 @@ Run slug without any options to get a help message.
 
 The normal workflow is:
 
- $ slug init        # run once to initialize the backup system
+ $ slug init         # run once to initialize the backup system
  $ vim .gitignore    # edit to make sure you don't import unwanted files
                      # edit .gitignore files in other subdirectories
                      # you can get a list of the files which will be saved
                      # with  find-git-files  or  slug ls-new-files
- $ slug commit      # the first commit will be fairly slow, but the following
+ $ slug it           # the first slug-it will be fairly slow, but the following
                      # ones will be very fast
 
 .... later ....
 
- $ slug commit
+ $ slug it
 
 The backup will be placed in $HOME/.git. "Nested Git repositories" will be
 rsync'ed to $HOME/.git/git-repositories and they will be registered as
@@ -89,7 +90,7 @@ information on submodules). You might want to use a cronjob to save snapshots
 of the repositories in $HOME/.git/git-repositories 
 
 After you slug init, $HOME becomes a git repository, so you can use normal git
-commands. If you use "slug commit", however, new files will automatically be
+commands. If you use "slug it", however, new files will automatically be
 added to the repository if they are not ignored (as indicated in your
 .gitignore files), so you'll normally prefer it to "git commit".
 
@@ -141,7 +142,7 @@ should update these docs with that magic solution.
 
 3. Recommit
 /Users/bob# exit
-/Users/bob$ slug commit
+/Users/bob$ slug it
 
 4. Push back to the desktop
 
