@@ -1,3 +1,7 @@
+2010-08-30 13:00	Henry Baragar	<henry.baragar@instantiated.ca>
+	* Abandoning ChangeLog (this file) because Git does a better
+	  job of recording changes.
+
 2010-08-30 11:00	Henry Baragar <henry.baragar@instantiated.ca>
 	* Renamed to slug
 	* I intend to rename some of the commands
