@@ -392,6 +392,7 @@ case "$1" in
 	slug-it
 	;;
     fix-hooks)
+	cd $OLDWD
 	fix-hooks
 	;;
     init)
@@ -423,6 +424,20 @@ case "$1" in
 	;;
     it)
 	slug-it
+	;;
+    clone)
+	cd $OLDPWD
+	shift
+	set `git clone --no-checkout "$@" || echo failed`
+	REPO="$6"
+	if [ -n "$REPO" -a -d "$REPO" ]
+	then
+	    cd $REPO/..
+	    fix-hooks
+	    echo
+	    echo "Repository cloned. To restore files: cd $PWD; git checkout"
+	    echo
+	fi
 	;;
     eat)
 	if test "$ORIG_DIR" != "$HOME"; then
@@ -503,7 +518,8 @@ case "$1" in
 	echo "    help"
 	echo "    init"
 	echo "    it		# to make a snaphot"
-	echo "    fix-hooks"
+	echo "    clone	# of a slug repository using git syntax (does a fix-hooks)"
+	echo "    fix-hooks	# must be run from parent of a slug repository"
 	echo "    eat <file_or_dir>"
 	echo "    show <file> as of <time_spec>"
 	echo "    ls-changed-files"
