@@ -12,6 +12,7 @@ Please install:
 
 When done, please:
 	touch .install_dependencies
+	make 
 
 EOT
 
