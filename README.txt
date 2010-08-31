@@ -23,8 +23,8 @@ History
 slub mostly is "gibak" with some improvements.  I seem to have a lot of trouble
 typing "gibak" and "gibak commit" (which just doesn't make sense to me).  So
 I renamed it slug (following the meme use for name "git") and will changed the
-"commit" command to "it".  I probably will add a "slug outta-here" to do a
-"slug it" followed by a "git push".
+"commit" command to "it".  A "slug away" command was added to push changes to 
+a remote repository, either on the same machine or on a remote machine.
 
 
 Dependencies
@@ -67,6 +67,7 @@ in most cases, but you might need to change a couple variables:
 
 Usage
 =====
+
 Run slug without any options to get a help message.
 
 The normal workflow is:
@@ -94,79 +95,35 @@ commands. If you use "slug it", however, new files will automatically be
 added to the repository if they are not ignored (as indicated in your
 .gitignore files), so you'll normally prefer it to "git commit".
 
-About the backup store
-----------------------
-The backup data is placed in $HOME/.git. You can mount an external disk there
-if you want your backup to reside in a different physical disk for resiliency
-against disk crashes. You can also clone the repository (probably using a bare
-repository --- without working tree --- for smaller space usage) and rsync
-.git/git-repositories to remote machines for further protection.
 
-Multiple machines
------------------
-You can clone your home directory on another machine, but it's a little 
-tricky: git won't let you clone into an existing directory.  Also, git won't
-copy the links in .git/hooks, which we use to update the metadata on each
-checkout.  Be sure that your UID and GUID are the same on both machines!
+Extended Usage
+==============
 
-So, to clone from your desktop to your laptop, do this on the laptop:
+The major advantage of using slug over gibak is ability to easily back up the
+repository to another location, probably on another machine.
 
-1. Copy over slug and ometastore to a directory in your path
-/Users/bob$ sudo -s
-/Users/bob# cd /usr/local/bin
-/usr/local/bin# scp desktop:/usr/local/bin/slug .
-/usr/local/bin# scp desktop:/usr/local/bin/ometastore .
+The extended workflow is:
 
-1. Do the initial clone
+ $ slug it           # From the normal workflow
+ $ slug away /abosulute/path
+                     # where /absolute/path is where a new bare git repository
+                     # is to be created (i.e. a copy of $HOME/.git)
+                     # NB. the first slug-it will be fairly slow, but the
+                     # following ones will be very fast
 
-/usr/local/bin# cd ~bob
-/Users/bob# cd ..
-/Users# mkdir bob-temp
-/Users# git clone desktop:.git bob-temp
-/Users# ls bob-temp
-Documents/
-Library/
-...etc...
-/Users# mv bob-temp/* /Users/bob
+.... later ....
 
-This will fail to move any directories that already exist in your 
-home directory.  I'm sure there's a nice, safe way around that, so someone
-should update these docs with that magic solution.
+ $ slug it
+ $ slug away         # pushes the repository changes to the /absolute/path
 
-2. Link the hooks and update your metadata:
 
-/Users# cd bob
-/Users/bob# ln -s .git-hooks/* .git/hooks
-/Users/bob# .git/hooks/post-checkout
-...any errors will be displayed...
+Note that the "/abosolute/path" can be replaced with a scp target (e.g.
+user@remote.host:path) to place the "away" repository on a remote machine.
 
-3. Recommit
-/Users/bob# exit
-/Users/bob$ slug it
 
-4. Push back to the desktop
+Advanced Usage
+==============
 
-[THIS needs some serious documentation.  "git push" is NOT the way to go;
-you can't push into a repository with an active working copy!  That will
-leave desktop in a state where it incorrectly thinks it's out of date.
-
-I haven't figured this part out yet, but clues are at:
-
-http://hans.fugal.net/blog/2008/11/10/git-push-is-worse-than-worthless
-
-and
-
-http://git.or.cz/gitwiki/GitFaq#head-b96f48bc9c925074be9f95c0fce69bcece5f6e73
-
-...]
-
-5. Periodic synchronization
-
-When you want to sync the laptop, just:
-
-/Users/bob$ git pull
-...
-/Users/bob$ git that-magic-alternative-to-push-someone-wrote-about-in-step-4
 
 Known Bugs
 ==========

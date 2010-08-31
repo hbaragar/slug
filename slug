@@ -255,6 +255,31 @@ function slug-it() {
 }
 
 
+function slug-away() {
+    REMOTE_REPO="$1"
+    case "$REMOTE_REPO" in
+	/* | *:*)
+	    cp .git/config .git/config~
+	    git config core.bare true
+	    scp -rp .git $REMOTE_REPO && (
+	    	git remote rm origin 2>/dev/null
+		git remote add -t master -m master origin $REMOTE_REPO
+	    )	&& 
+	    git config core.bare false &&
+	    rm .git/config~  ||
+	    mv .git/config~ .git/config
+	    ;;
+	"")
+	    git pull >/dev/null
+	    git push
+	    ;;
+	*) 
+	    echo >&2 "away repository must be an absolute path or an 'scp' path"
+	    ;;
+    esac
+}
+
+
 function rm_older_than() {
     __abort_on_not_initialized
     local time_spec="$@"
@@ -425,6 +450,10 @@ case "$1" in
     it)
 	slug-it
 	;;
+    away)
+	shift
+	slug-away "$@"
+	;;
     clone)
 	cd $OLDPWD
 	shift
@@ -517,9 +546,12 @@ case "$1" in
 	echo "<action> can be:"
 	echo "    help"
 	echo "    init"
-	echo "    it		# to make a snaphot"
-	echo "    clone	# of a slug repository using git syntax (does a fix-hooks)"
-	echo "    fix-hooks	# must be run from parent of a slug repository"
+	echo "    it				# to make a snaphot"
+	echo "    away /absolute/path		# copies the repository to a new local 'bare' repository"
+	echo "    away user@host:path		# copies the repository to a new remote 'bare' repository"
+	echo "    away			# updates the previously copied repository"
+	echo "    clone <away-repo>		# clones your home directory from an 'away' repository"
+	echo "    fix-hooks			# must be run from parent directory of a slug repository"
 	echo "    eat <file_or_dir>"
 	echo "    show <file> as of <time_spec>"
 	echo "    ls-changed-files"
