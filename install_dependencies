@@ -1,0 +1,37 @@
+#! /bin/sh
+
+DEBIAN_DEPENCIES="ocaml omake libfileutils-ocaml-dev libfindlib-ocaml-dev"
+
+cat >.dependency_install_instructions <<EOT
+
+Please install:
+	ocaml (tested with version 3.10.1 and 3.10.2)
+	omake
+	ocaml-fileutils
+	Findlib
+
+When done, please:
+	touch .install_dependencies
+
+EOT
+
+if type dpkg >/dev/null
+then
+    if dpkg --get-selections $DEBIAN_DEPENCIES 2>&1 |grep "No packages found matching"
+    then
+	if apt-get install $DEBIAN_DEPENCIES
+	then
+	    touch .install_dependencies
+	    exit 0
+	else
+	    cat .dependency_install_instructions
+	    exit 1
+	fi
+    else
+	touch .install_dependencies
+        exit 0
+    fi
+else
+    cat .dependency_install_instructions
+    exit 1
+fi

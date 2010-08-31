@@ -46,8 +46,22 @@ To install dependencies on Mac:
 * sudo port install git-core rsync caml-findlib omake
 * There is no port for ocaml-fileutils; you'll have to build it from source at http://le-gall.net/sylvain+violaine/download/ocaml-fileutils-latest.tar.gz
 
+
 Installation
 ============
+
+Quick Install
+-------------
+
+ $ make 
+ $ make install
+
+
+Advanced Install
+----------------
+
+If the Quick Install does not work, then follow these instructions.
+
 
 (1) Verify the compilation parameters in OMakefile. The defaults should work
 in most cases, but you might need to change a couple variables:
@@ -64,6 +78,7 @@ in most cases, but you might need to change a couple variables:
   find-git-repos
   slug
   ometastore
+
 
 Usage
 =====

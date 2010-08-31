@@ -13,3 +13,6 @@ _build
 ometastore
 find-git-files
 find-git-repos
+.install_dependencies
+.dependency_install_instructions
+
