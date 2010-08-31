@@ -124,6 +124,42 @@ user@remote.host:path) to place the "away" repository on a remote machine.
 Advanced Usage
 ==============
 
+Its possible, if you are careful, to use slug to keep to keep synchronized
+two home directories on two different machines.  This section explains how.
+
+First, you need to set things up as follows (assuming you have a desktop
+and a laptop):
+
+ 1. "slug init" on the desktop
+ 2. "slug it" on the desktop
+ 3. copy files from the laptop that are missing onto the desktop
+ 4. "slug it" on the desktop
+ 5. "slug away /disk2/henry.slug"
+ 6. back up and remove all files from the home directory (e.g. /home/henry) on the laptop
+ 7. "slug clone henry@desktop/disk2/henry.slug /home/henry" on the laptop
+
+Now the two home directories should be synchronized. And yes, you have and need all
+three repositories.
+
+When you start working on either the desktop or the laptop, the advanced
+workflow is:
+
+ $ slug away          # to ensure the local home directory is up to date
+                      # with the <away-repo>
+
+.... after the work is done ....
+
+ $ slug it
+ $ slug away          # to ensure that the <away-repo> is updated
+
+If you forget to slug it away after working on one machine and after working on
+the other machine (or have to work on both machines simultaneously), you still can use 
+the advanced workflow to resynchronize your home directories.  If Git can resolve 
+the differences, than the files will automatically be merged.  If not, then you will
+have to follow the Git procedures to resolve the conflicts and use Git to update
+your repository, at which point you can use "slug away" again.
+
+
 
 Known Bugs
 ==========

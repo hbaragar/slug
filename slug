@@ -457,15 +457,12 @@ case "$1" in
     clone)
 	cd $OLDPWD
 	shift
-	set `git clone --no-checkout "$@" || echo failed`
+	set `git clone "$@" || echo failed`
 	REPO="$6"
 	if [ -n "$REPO" -a -d "$REPO" ]
 	then
 	    cd $REPO/..
 	    fix-hooks
-	    echo
-	    echo "Repository cloned. To restore files: cd $PWD; git checkout"
-	    echo
 	fi
 	;;
     eat)
@@ -549,8 +546,8 @@ case "$1" in
 	echo "    it				# to make a snaphot"
 	echo "    away /absolute/path		# copies the repository to a new local 'bare' repository"
 	echo "    away user@host:path		# copies the repository to a new remote 'bare' repository"
-	echo "    away			# updates the previously copied repository"
-	echo "    clone <away-repo>		# clones your home directory from an 'away' repository"
+	echo "    away			# updates the previously copied <away-repo>"
+	echo "    clone <away-repo> <new-dir>	# clones your home directory using an 'away' repository"
 	echo "    fix-hooks			# must be run from parent directory of a slug repository"
 	echo "    eat <file_or_dir>"
 	echo "    show <file> as of <time_spec>"
