@@ -116,6 +116,9 @@ The extended workflow is:
  $ slug it
  $ slug away         # pushes the repository changes to the /absolute/path
 
+.... even later ....
+
+ $ slug it away      # same as "slug it; slug away"
 
 Note that the "/abosolute/path" can be replaced with a scp target (e.g.
 user@remote.host:path) to place the "away" repository on a remote machine.
@@ -149,10 +152,9 @@ workflow is:
 
 .... after the work is done ....
 
- $ slug it
- $ slug away          # to ensure that the <away-repo> is updated
+ $ slug it away       # to ensure that the <away-repo> is updated
 
-If you forget to slug it away after working on one machine and after working on
+If you forget to "slug it away" after working on one machine and after working on
 the other machine (or have to work on both machines simultaneously), you still can use 
 the advanced workflow to resynchronize your home directories.  If Git can resolve 
 the differences, than the files will automatically be merged.  If not, then you will

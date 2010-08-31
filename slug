@@ -449,6 +449,10 @@ case "$1" in
 	;;
     it)
 	slug-it
+	if [ +"$2" = +away ]
+	then
+	    slug-away
+	fi
 	;;
     away)
 	shift
