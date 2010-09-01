@@ -28,7 +28,7 @@ fi
 # Autotools defines
 MANDIR="/usr/local/share/man"
 
-SCRIPT_NAME="${var##*/}"
+SCRIPT_NAME="`basename $0`"
 ORIG_DIR="$PWD"
 # Remember that all actions here are to be made in $HOME dir!
 cd $HOME
