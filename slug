@@ -2,6 +2,7 @@
 #
 # Copyright (c) 2007 Jean-Francois Richard <jean-francois@richard.name>
 #           (c) 2008 Mauricio Fernandez <mfp@acm.org>
+#           (c) 2010 Henry Bargar <henry.baragar@instantiated.ca>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,7 +18,7 @@
 # along with this program.  If not, see
 # <http://www.gnu.org/licenses/>.
 
-version="0.3.0"
+version="0.4.0"
 
 if ! which git &>/dev/null; then
     echo "Please Git" >&2
